@@ -17,6 +17,16 @@ async function run() {
     try {
         await client.connect();
         console.log('database connected successfully');
+
+        // GET method for blogs API
+        app.get('/read-blogs', async (req, res) => {
+            await client.connect();
+            console.log('database connected successfully');
+            const database = client.db('travel_agency');
+            const blogsCollection = database.collection('blogs');
+            const result = await blogsCollection.find().toArray();
+            res.send(result);
+        });
     } finally {
         await client.close();
     }
