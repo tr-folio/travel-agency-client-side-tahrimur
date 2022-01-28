@@ -40,6 +40,17 @@ async function run() {
             const result = await blogsCollection.findOne(query);
             res.send(result);
         });
+
+        // POST method for save-user API
+        app.post('/save-user', async (req, res) => {
+            await client.connect();
+            console.log('database connected successfully');
+            const user = req.body;
+            const database = client.db('travel_agency');
+            const usersCollection = database.collection('users');
+            const result = await usersCollection.insertOne(user);
+            res.json(result);
+        })
     } finally {
         await client.close();
     }
