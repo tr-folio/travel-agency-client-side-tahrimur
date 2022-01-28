@@ -63,6 +63,32 @@ async function run() {
             const result = await usersCollection.insertOne(user);
             res.json(result);
         })
+
+        // PUT method to update a blog
+        app.put('/update-blog/:id', async (req, res) => {
+            await client.connect();
+            console.log('database connected successfully');
+            const database = client.db('travel_agency');
+            const blogsCollection = database.collection('blogs');
+            const id = req.params.id;
+            const query = {_id: ObjectId(id)};
+            console.log(query);
+            let blog = req.body;
+            console.log(blog);
+            const result = await blogsCollection.updateOne(query, {$set: {
+                "blog_title": `${blog.blog_title}`,
+                "blog_image": `${blog.blog_image}`,
+                "traveller": `${blog.traveller}`,
+                "description": `${blog.description}`,
+                "category": `${blog.category}`,
+                "expense": `${blog.expense}`,
+                "location": `${blog.location}`,
+                "date": `${blog.date}`,
+                "time": `${blog.time}`,
+                "rating": `${blog.rating}`
+            }});
+            res.json(result);
+        })
     } finally {
         await client.close();
     }
