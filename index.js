@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const {MongoClient} = require('mongodb');
+const ObjectId = require('mongodb').ObjectID;
 const cors = require('cors');
 require('dotenv').config();
 const port = process.env.PORT || 5000;
@@ -25,6 +26,18 @@ async function run() {
             const database = client.db('travel_agency');
             const blogsCollection = database.collection('blogs');
             const result = await blogsCollection.find().toArray();
+            res.send(result);
+        });
+
+        // GET method for single-blog API
+        app.get('/single-blog/:id', async (req, res) => {
+            await client.connect();
+            console.log('database connected successfully');
+            const database = client.db('travel_agency');
+            const blogsCollection = database.collection('blogs');
+            const id = req.params.id;
+            const query = {_id: ObjectId(id)};
+            const result = await blogsCollection.findOne(query);
             res.send(result);
         });
     } finally {
