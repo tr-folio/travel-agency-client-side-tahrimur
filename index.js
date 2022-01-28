@@ -41,6 +41,18 @@ async function run() {
             res.send(result);
         });
 
+        // GET method for single-user
+        app.get('/single-user/:email', async (req, res) => {
+            await client.connect();
+            console.log('database connected successfully');
+            const database = client.db('travel_agency');
+            const usersCollection = database.collection('users');
+            const email = req.params.email;
+            const query = {email: email};
+            const result = await usersCollection.findOne(query);
+            res.send(result);
+        })
+
         // POST method for save-user API
         app.post('/save-user', async (req, res) => {
             await client.connect();
